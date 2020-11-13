@@ -1,0 +1,4 @@
+- hosts: all
+  roles:
+    - bloodymage.rebeldream.info
+  ignore_unreachable: yes

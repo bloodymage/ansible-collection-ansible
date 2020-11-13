@@ -1,0 +1,10 @@
+---
+# tasks file for password_store
+- name: Save password to passwordstore
+  ansible.builtin.debug:
+    msg: "{{ lookup('community.general.passwordstore', ansible_domain/'domain_users'/item.username/'password create=true userpass=item.password')}}"
+  loop: "{{ domain_users }}"
+  run_once: yes
+  when: domain_users is defined
+  tags:
+    - save-to-passwordstorex

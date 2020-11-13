@@ -1,0 +1,62 @@
+---
+# tasks file for site-info
+- name: "Print System Information"
+  debug:
+    msg:
+      - "System {{ inventory_hostname }}"
+      - "    I. Hostname:  {{ inventory_hostname_short }}"
+      - "    Hostname:     {{ ansible_hostname }}"
+      - "    FQDN:         {{ ansible_fqdn }}"
+      - "    IPv4 Addr:    {{ ansible_host }}"
+      - "    IPv4 Rev DNS: {{ reverse_dns }}"
+      - "    IPv6 Addr:    {{ ansible_default_ipv6.address | default(none) }}"
+      - "    System:       {{ ansible_system }}"
+      - "    OS Family:    {{ ansible_os_family }}"
+      - "    Distro:       {{ ansible_distribution }}"
+      - "    Distro ID:    {{ ansible_lsb.id }}"
+      - "    Release       {{ ansible_distribution_release }}"
+      - "  Inventory:      {{ inventory_dir }}"
+
+- debug:
+    msg:
+      - "System {{ inventory_hostname }}"
+      - "    Domain:       {{ ansible_domain }}"
+      - "    Realm:        {{ ansible_domain|upper }}"
+      - "    Workgroup:    {{ ansible_domain.split('.')[0]|upper }}"
+      - "    Lets Encrypt: {{ letsencrypt_hosts }}"
+    verbosity: 2
+
+- debug:
+    msg:
+      - "System {{ inventory_hostname }}"
+      - "    OS Family:           {{ ansible_os_family.split(' ')[0] | lower }}"
+    verbosity: 3
+
+- debug:
+    msg:
+      - "System {{ inventory_hostname }}"
+      - "    OS:           {{ ansible_os | default(none) }}"
+      - "    Network OS:   {{ ansible_network_os | default(none) }}"
+    verbosity: 2
+
+#    msg: System {{ inventory_hostname }} has gateway {{ ansible_default_ipv4.gateway }}
+#  when: ansible_default_ipv4.gateway is defined
+
+# Example that prints return information from the previous task
+
+- name: Display all variables/facts known for a host
+  debug:
+    var: hostvars[inventory_hostname]
+    verbosity: 4
+
+# Example that prints two lines of messages, but only if there is an environment value set
+#- debug:
+#    msg:
+#      - "Provisioning based on YOUR_KEY which is: {{ lookup('env', 'YOUR_KEY') }}"
+#      - "These servers were built using the password of '{{ password_used }}'. Please retain this for later use."
+
+# ======================================================================
+#
+#
+#
+# ======================================================================

@@ -1,0 +1,36 @@
+galaxy_info:
+  author: {{ developer_name }}
+description: your role description
+{% if developer_company is defined %}
+  company: {{ developer_company }}
+{% endif %}
+
+{% if issue_tracker is defined %}
+  issue_tracker_url: {{ issue_tracker }}
+{% endif %}
+
+{% if license is defined %}
+  license: {{ license }}
+{% endif %}
+
+
+  min_ansible_version: {{ min_ansible_version | default(ansible_version['full']) }}
+
+{% if min_ansible_container_version is defined %}
+  # min_ansible_container_version:
+{% endif %}
+
+{% if platforms is defined %}
+  platforms:
+  {% for platform in platforms %}
+    - name: {{ platform.name }}
+      versions:
+    {% for version in platform.versions %}
+      {{ version }}
+    {% endfor %}
+  {% endfor %}
+  {% endif %}
+
+  galaxy_tags: {{ galaxy_tags | default('[]') }}
+
+  dependencies: {{ dependencies | default('[]') }}
