@@ -1,10 +1,51 @@
 ---
 # tasks file for password_store
-- name: Save password to passwordstore
+# - name: "Save Domain Users' password to password-store"
+#   ansible.builtin.debug:
+#     msg: "{{ lookup('community.general.passwordstore', password_store_id + ' create=true length=42 nosymbols=true userpass=' + item.password) }}"
+#   vars:
+#     password_store_id: "{{ ansible_domain }}/domain_users/{{ item.username }}_password"
+#   loop: "{{ domain_users }}"
+#   run_once: yes
+#   when:
+#     - domain_users is defined
+#   tags:
+#     - save-to-password-store
+
+# - name: "Save Users' password to password-store"
+#   ansible.builtin.debug:
+#     msg: "{{ lookup('community.general.passwordstore', password_store_id + ' create=true length=42 nosymbols=true userpass=' + item.password) }}"
+#   vars:
+#     password_store_id: "{{ ansible_domain }}/hosts/{{ inventory_hostname_short }}/{{ item.username }}_password"
+#   loop: "{{ users }}"
+#   run_once: yes
+#   when:
+#     - users is defined
+#     - item.password is defined
+#   tags:
+#     - save-to-password-store
+
+# - name: "Save Users' password to password-store"
+#   ansible.builtin.debug:
+#     msg: "{{ lookup('community.general.passwordstore', password_store_id + ' create=true length=42 nosymbols=true userpass=' + item.ssh_key_password) }}"
+#   vars:
+#     password_store_id: "{{ ansible_domain }}/hosts/{{ inventory_hostname_short }}/{{ item.username }}_ssh_key_password"
+#   loop: "{{ users }}"
+#   run_once: yes
+#   when:
+#     - users is defined
+#     - item.ssh_key_password is defined
+#   tags:
+#     - save-to-password-store
+
+- name: "Save MySQL Users' password to password-store"
   ansible.builtin.debug:
-    msg: "{{ lookup('community.general.passwordstore', ansible_domain/'domain_users'/item.username/'password create=true userpass=item.password')}}"
-  loop: "{{ domain_users }}"
+    msg: "{{ lookup('community.general.passwordstore', password_store_id + ' create=true length=42 nosymbols=true userpass=' + item.db_password) }}"
+  vars:
+    password_store_id: "{{ ansible_domain }}/services/mysql/{{ item.db_user }}"
+  loop: "{{ hosts }}"
   run_once: yes
-  when: domain_users is defined
+  when:
+    - hosts is defined
   tags:
-    - save-to-passwordstorex
+    - save-to-password-store

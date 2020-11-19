@@ -1,0 +1,38 @@
+galaxy_info:
+  author: {{ developer_name }}
+  description: {{ item.description }}
+  company: {{ developer_company }}
+
+{% if collection.issue_tracker_url is defined %}
+  issue_tracker_url: {{ collection.issue_tracker_url }}
+{% endif %}
+
+{% if collection.license is defined %}
+  license: {{ collection.license }}
+{% endif %}
+
+  min_ansible_version: {{ collection.min_ansible_version | default(ansible_version['full']) }}
+
+{% if collection.min_ansible_container_version is defined %}
+  # min_ansible_container_version: {{ collection.min_ansible_container_version }}
+{% endif %}
+{% if collection.platforms is defined %}
+  platforms:
+{% for platform in collection.platforms %}
+    - name: {{ platform.name }}
+      versions:
+{% for version in platform.versions %}
+        - {{ version }}
+{% endfor %}
+{% endfor %}
+{% endif %}
+
+  galaxy_tags:
+{% for tag in item.galaxy_tags %}
+    - {{ tag }}
+{% endfor %}
+
+dependencies:
+{% for dependency in item.dependencies %}
+  - role: {{ dependency }}
+{% endfor %}

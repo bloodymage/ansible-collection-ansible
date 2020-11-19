@@ -1,6 +1,6 @@
 ---
 # defaults file for site-info
-reverse_dns_list: "{{ ansible_host.split('.') }}"
-reverse_dns: "{{ reverse_dns_list[3] + '.' + reverse_dns_list[2] + '.' + reverse_dns_list[1] }}"
+#reverse_dns_list: "{{ ansible_host.split('.') }}"
+#reverse_dns: "{{ reverse_dns_list[2] + '.' + reverse_dns_list[1] }}"
 
 letsencrypt_hosts: "Not Applicable"

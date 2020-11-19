@@ -1,2 +1,10 @@
 ---
 # tasks file for generate_documents
+- name: Include roles.yml
+  include: "roles.yml"
+  loop: "{{ collections }}"
+  loop_control:
+    loop_var: collection
+  tags:
+    - generate_documents
+    - generate-documents

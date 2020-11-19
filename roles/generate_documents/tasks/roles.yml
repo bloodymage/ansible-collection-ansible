@@ -1,0 +1,12 @@
+---
+- name: Create Meta Yml
+  template:
+    src: role_meta.j2
+    dest: "/home/pecan/.ansible/collections/ansible_collections/{{ developer_company | lower }}/{{ collection.name }}/roles/{{ item.name }}/meta/main.yml.test"
+    owner: pecan
+    group: pecan
+  become: no
+  loop: "{{ collection.roles }}"
+  tags:
+    - generate_documents
+    - generate-documents
