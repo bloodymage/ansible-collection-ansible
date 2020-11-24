@@ -1,0 +1,58 @@
+---
+debian_packages:
+  - nmap
+
+ansible_default_host_list:
+  - "/etc/ansible/hosts"
+
+packages: "{{ debian_packages }}"
+
+ansible_gathering: implicit
+ansible_stdout_callback: skippy
+
+ansible_nocows: no
+ansible_cow_selection: "default"
+ansible_cow_whitelist:
+  - bud-frogs
+  - bunny
+  - C3PO
+  - calvin
+  - cheese
+  - daemon
+  - default
+  - dragon
+  - elephant-in-snake
+  - elephant
+  - eyes
+  - hellokitty
+  - kitty
+  - luke-koala
+  - meow
+  - milk
+  - moofasa
+  - moose
+  - queen
+  - R2-D2
+  - ren
+  - sheep
+  - small
+  - stegosaurus
+  - stimpy
+  - supermilker
+  - three-eyes
+  - turkey
+  - turtle
+  - tux
+  - udder
+  - vader-koala
+  - vader
+  - www
+
+ansible_nocolor: no
+
+inventory_plugins:
+  - host_list
+  - script
+  - yaml
+  - ini
+  - auto

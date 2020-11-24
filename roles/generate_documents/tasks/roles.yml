@@ -2,7 +2,7 @@
 - name: Create Meta Yml
   template:
     src: role_meta.j2
-    dest: "/home/pecan/.ansible/collections/ansible_collections/{{ developer_company | lower }}/{{ collection.name }}/roles/{{ item.name }}/meta/main.yml.test"
+    dest: "/home/pecan/.ansible/collections/ansible_collections/{{ developer_company | lower }}/{{ collection.name }}/roles/{{ item.name }}/meta/main.yml"
     owner: pecan
     group: pecan
   become: no
@@ -10,3 +10,37 @@
   tags:
     - generate_documents
     - generate-documents
+
+- name: "Create Readme.md"
+  template:
+    src: "readme.j2"
+    dest: "/home/pecan/.ansible/collections/ansible_collections/{{ developer_company | lower }}/{{ collection.name }}/roles/{{ item.name }}/README.md"
+    owner: pecan
+    group: pecan
+  become: no
+  loop: "{{ collection.roles }}"
+  tags:
+    - generate_documents
+    - generate-documents
+
+- name: "Install LICENSE.md"
+  copy:
+    src: "LICENSE_{{ collection.license }}.md"
+    dest: "/home/pecan/.ansible/collections/ansible_collections/{{ developer_company | lower }}/{{ collection.name }}/roles/{{ item.name }}/LICENSE.md"
+    owner: pecan
+    group: pecan
+  become: no
+  loop: "{{ collection.roles }}"
+  tags:
+    - generate_documents
+    - generate-documents
+
+- name: Include generate_main.yml
+  include: "generate_main.yml"
+  loop: "{{ collection.roles }}"
+  loop_control:
+    loop_var: role
+  tags:
+    - generate_documents
+    - generate-documents
+

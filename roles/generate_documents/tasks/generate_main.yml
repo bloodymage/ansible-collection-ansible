@@ -1,0 +1,41 @@
+- name: "Ensure {{ role.name }} directories exist"
+  file: 
+    path: "/home/pecan/.ansible/collections/ansible_collections/{{ developer_company | lower }}/{{ collection.name }}/roles/{{ role.name }}/{{ item }}"
+    state: directory
+    owner: pecan
+    group: pecan
+  become: no
+  loop:
+    - defaults
+    - files
+    - handlers
+    - meta
+    - tasks
+    - templates
+    - tests
+    - vars
+  tags:
+    - generate_documents
+    - generate-documents
+
+- name: "Create {{ role.name }} main.yml files"
+  file: 
+    path: "/home/pecan/.ansible/collections/ansible_collections/{{ developer_company | lower }}/{{ collection.name }}/roles/{{ role.name }}/{{ item }}/main.yml"
+    state: touch
+    owner: pecan
+    group: pecan
+    modification_time: preserve
+    access_time: preserve
+  become: no
+  loop:
+    - defaults
+    - files
+    - handlers
+    - meta
+    - tasks
+    - templates
+    - tests
+    - vars
+  tags:
+    - generate_documents
+    - generate-documents

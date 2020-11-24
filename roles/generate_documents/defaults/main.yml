@@ -1,3 +1,27 @@
 ---
 # defaults file for generate_documents
 devoloper_name: "{{ ansible_user }}"
+
+readme_sections:
+  - name: Description
+    link: description
+  - name: Installation
+    link: installation
+  - name: Requirements
+    link: requirements
+  - name: Usage
+    link: usage
+  - name: Role Variables
+    link: role-variables
+  - name: Features and Advantages
+    link: features-and-advantages
+  - name: Similar Projects
+    link: similar-projects
+  - name: References
+    link: references
+  - name: Contributing
+    link: contributing
+  - name: License
+    link: license
+  - name: Author Information
+    link: author-information

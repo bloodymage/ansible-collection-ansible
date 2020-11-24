@@ -1,42 +1,79 @@
-{{ item.name }}
+Ansible Role: {{ developer_company }}.{{ collection.name }}.{{ item.name }}
 ===============
 
+{% for section in readme_sections %}
+- [{{ section.name }}]({{ "#" }}{{ section.link }})
+{% endfor %}
+
+Description
+-----------
 {{ item.description }}
 
-Requirements
+Installation
 ------------
+
+### Requirements
 
 Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
 
-Role Variables
---------------
-
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
-
-Dependencies
-------------
+### Dependencies
+```
+{% for dependency in collection.dependencies %}
+- role: {{ dependency }}
+{% endfor %}
+{% if item.dependencies is defined %}
+{% for dependency in item.dependencies %}
+- role: {{ dependency }}
+{% endfor %}
+{% endif %}
+```
 
 A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
 
-Example Playbook
-----------------
+Usage
+-----
+
+### Role Variables
+
+A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+
+### Example Playbook
 
 Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+        - { role: {{ developer_company | lower }}.{{ collection.name }}.{{ item.name }}, x: 42 }
+
+Features and Advantages
+-----------------------
+
+
+Similar Projects
+----------------
+{% if item.projects is defined %}
+{% for project in item.projects %}
+- [{{ project.name }}]({{ project.link }})
+{% endfor %}
+{% endif %}
+
+References
+----------
+{% if item.references is defined %}
+{% for reference in item.references %}
+- [{{ reference.name }}]({{ reference.link }})
+{% endfor %}
+{% endif %}
+
+Contributing
+------------
+[{{ collection.contributing.name }}]({{ collection.contributing.link }})
 
 License
 -------
-
-{{ collection.license }}
+[{{ collection.license }}](LICENSE.md)
 
 Author Information
 ------------------
 {{ developer_name }}
 {{ developer_email }}
-
-References
-----------
-{{ item.references }}

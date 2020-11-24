@@ -28,11 +28,19 @@ galaxy_info:
 {% endif %}
 
   galaxy_tags:
+{% for tag in collection.galaxy_tags: %}
+    - {{ tag }}
+{% endfor %}
 {% for tag in item.galaxy_tags %}
     - {{ tag }}
 {% endfor %}
 
 dependencies:
+{% for dependency in collection.dependencies %}
+  - role: {{ dependency }}
+{% endfor %}
+{% if item.dependencies is defined %}
 {% for dependency in item.dependencies %}
   - role: {{ dependency }}
 {% endfor %}
+{% endif %}
