@@ -1,11 +1,9 @@
 ---
-debian_packages:
+packages:
   - nmap
 
 ansible_default_host_list:
   - "/etc/ansible/hosts"
-
-packages: "{{ debian_packages }}"
 
 ansible_gathering: implicit
 ansible_stdout_callback: skippy

@@ -1,0 +1,10 @@
+---
+# tasks file for python
+- name: 'install python'
+  raw: 'apt-get -y install {{ item }}'
+  loop: "{{ packages }}"
+  become: yes
+  when:
+    - ansible_network_os is not defined
+  tags:
+    - python

@@ -1,0 +1,8 @@
+---
+# defaults file for python
+debian_packages:
+  - python3
+  - python3-pip
+  - python3-setuptools
+
+packages: "{{ debian_packages }}"
