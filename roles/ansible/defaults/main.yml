@@ -5,7 +5,7 @@ packages:
 ansible_default_host_list:
   - "/etc/ansible/hosts"
 
-ansible_gathering: implicit
+ansible_gathering: smart
 ansible_stdout_callback: skippy
 
 ansible_nocows: no

@@ -1,5 +1,24 @@
 ---
 # tasks file for python
+- name: Include OS-specific variables.
+  include_vars: "{{ lookup('first_found', params) }}"
+  vars:
+    params:
+      files:
+        - "{{ ansible_network_os | default(none) }}.yml"
+        - "{{ ansible_distribution | lower }}.yml"
+        - "{{ ansible_distribution.split(' ')[0] | lower }}.yml"
+        - "{{ ansible_os_family | lower }}_family.yml"
+        - "{{ ansible_system | lower }}.yml"
+        - main.yml
+      paths:
+        - "vars"
+  become: no
+  tags:
+    - python
+    - python_debug
+    - python-debug
+
 - name: 'install python'
   raw: 'apt-get -y install {{ item }}'
   loop: "{{ packages }}"
@@ -8,3 +27,16 @@
     - ansible_network_os is not defined
   tags:
     - python
+    - python_debug
+    - python-debug
+
+- name: Configure Alternatives
+  command:
+    cmd: "/usr/bin/update-alternatives --install /usr/bin/python python /usr/bin/python{{ item.name }} {{ item.priority }}"
+  become: yes
+  loop: "{{ python_alternatives }}"
+  tags:
+    - python
+    - python_debug
+    - python-debug
+    - python-update-alternatives

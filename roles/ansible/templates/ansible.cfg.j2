@@ -25,10 +25,6 @@ inventory            =
   remote_user = {{ ansible_default_remote_user}}
 {% endif %}
 
-{% if ansible_allow_world_readable_tmpfiles is defined %}
-  allow_world_readable_tmpfiles: {{ ansible_allow_world_readable_tmpfiles }}
-{% endif %}
-
 gathering = {{ ansible_gathering }}
 #gather_subset = all
 # gather_timeout = 10

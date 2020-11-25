@@ -1,4 +1,4 @@
 - hosts: localhost
   roles:
-    - bloodymage.rebeldream.python
-    - bloodymage.rebeldream.ansible
+    #- bloodymage.ansible.python
+    - bloodymage.ansible.ansible

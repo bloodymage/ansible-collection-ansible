@@ -1,5 +1,10 @@
 - hosts: all:!localhost
   roles:
+    - bloodymage.ansible.python
+
+- hosts: all:!localhost
+  ignore_unreachable: yes
+  roles:
     - bloodymage.ansible.password_store
 
 
