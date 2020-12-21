@@ -3,46 +3,67 @@
 - name: Get IP geolocation data
   community.general.ipinfoio_facts:
 
+- name: Set facts
+  ansible.builtin.set_fact:
+    realm: "{{ ansible_domain | default(none) }}"
+
+- name: Set facts
+  ansible.builtin.set_fact:
+    workgroup: "{{ realm.split('.')[0] | default(none) }}"
+
+- name: Set Host Status
+  ansible.builtin.set_fact:
+    status: "Unreachable"
+  when:
+    - unreachable is defined
+
 - name: "Print System Information"
   debug:
     msg:
       - "System {{ inventory_hostname }}"
       - "    I. Hostname:  {{ inventory_hostname_short }}"
-      - "    Hostname:     {{ ansible_hostname }}"
-      - "    FQDN:         {{ ansible_fqdn }}"
+      - "    Hostname:     {{ ansible_hostname | default(inventory_hostname_short) }}"
+      - "    FQDN:         {{ ansible_fqdn | default(inventory_hostname) }}"
       - "    IPv4 Addr:    {{ ansible_host }}"
       - "    IPv6 Addr:    {{ ansible_default_ipv6.address | default(none) }}"
-      - "    System:       {{ ansible_system }}"
-      - "    OS Family:    {{ ansible_os_family }}"
-      - "    Distro:       {{ ansible_distribution }}"
-      - "    Distro ID:    {{ ansible_lsb.id }}"
-      - "    Release       {{ ansible_distribution_release }}"
+      - "    System:       {{ ansible_system | default(none) }}"
+      - "    OS Family:    {{ ansible_os_family | default(none) }}"
+      - "    Distro:       {{ ansible_distribution | default(none) }}"
+      - "    Distro ID:    {{ ansible_lsb.id | default(none) }}"
+      - "    Release       {{ ansible_distribution_release | default(none) }}"
+      - "    Status:       {{ status }}"
       - "  Inventory:      {{ inventory_dir }}"
-    verbosity: 1
 
 - name: Print Geolocation Information
   debug:
     msg:
-      - "City:    {{ city }}"
-      - "State:   {{ region }}"
-      - "Country: {{ country }}"
-      - "Location: {{ loc }}"
+      - "City:    {{ city  | default(none) }}"
+      - "State:   {{ region  | default(none) }}"
+      - "Country: {{ country  | default(none) }}"
+      - "Location: {{ loc  | default(none) }}"
+    verbosity: 1
+
+- name: Print Host Group Information
+  debug:
+    msg:
+      - "System {{ inventory_hostname }}"
+      - "Groups:  {{ group_names }}"
     verbosity: 1
 
 - name: "Print Domain Information"
   debug:
     msg:
       - "System {{ inventory_hostname }}"
-      - "    Domain:       {{ ansible_domain }}"
-      - "    Realm:        {{ ansible_domain|upper }}"
-      - "    Workgroup:    {{ ansible_domain.split('.')[0]|upper }}"
-      - "    Lets Encrypt: {{ letsencrypt_hosts }}"
+      - "    Domain:       {{ ansible_domain  | default(none) }}"
+      - "    Realm:        {{ realm | upper }}"
+      - "    Workgroup:    {{ workgroup | upper }}"
+      - "    Lets Encrypt: {{ letsencrypt_hosts  | default(none) }}"
     verbosity: 2
 
 - debug:
     msg:
       - "System {{ inventory_hostname }}"
-      - "    OS Family:           {{ ansible_os_family.split(' ')[0] | lower }}"
+      - "OS Family:           {{ ansible_os_family.split(' ')[0] | lower | default(none) }}"
     verbosity: 3
 
 - debug:

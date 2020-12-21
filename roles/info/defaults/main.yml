@@ -4,3 +4,4 @@
 #reverse_dns: "{{ reverse_dns_list[2] + '.' + reverse_dns_list[1] }}"
 
 letsencrypt_hosts: "Not Applicable"
+status: Online
