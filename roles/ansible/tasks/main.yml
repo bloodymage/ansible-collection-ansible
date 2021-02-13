@@ -2,12 +2,11 @@
 # tasks file for ansible-init
 - name: "Localhost: Install ansible.cfg"
   template:
-    src: "{{ role_path }}/templates/ansible.cfg.j2"
+    src: "ansible.cfg.j2"
     dest: ~/.ansible.cfg
-    owner: root
-    group: root
+    owner: pecan
+    group: pecan
     mode: '0644'
-  become: yes
   tags:
     - ansible
 

@@ -40,7 +40,7 @@ stdout_callback = {{ ansible_stdout_callback }}
 #sudo_flags = -H -S -n
 #timeout = 10
 
-#log_path = /var/log/ansible.log
+log_path = ~/ansible.log
 #module_name = command
 #executable = /bin/sh
 #hash_behaviour = replace
@@ -85,7 +85,7 @@ nocolor = {{ ansible_nocolor }}
 #squash_actions = apk,apt,dnf,homebrew,pacman,pkgng,yum,zypper
 #no_log = False
 #no_target_syslog = False
-allow_world_readable_tmpfiles = False
+#allow_world_readable_tmpfiles = False
 #var_compression_level = 9
 #module_compression = 'ZIP_DEFLATED'
 #max_diff_size = 1048576
