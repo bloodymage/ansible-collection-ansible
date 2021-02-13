@@ -1,6 +1,8 @@
 ---
 packages:
   - nmap
+  - python3-paramiko
+  - python3-winrm
 
 ansible_default_host_list:
   - "/etc/ansible/hosts"

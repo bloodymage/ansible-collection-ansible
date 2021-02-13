@@ -3,63 +3,107 @@
 - name: Get IP geolocation data
   community.general.ipinfoio_facts:
 
+- name: Set facts
+  ansible.builtin.set_fact:
+    realm: "{{ ansible_domain | default(none) }}"
+
+- name: Set facts
+  ansible.builtin.set_fact:
+    workgroup: "{{ realm.split('.')[0] | default(none) }}"
+
+- name: Set Host Status
+  ansible.builtin.set_fact:
+    status: "Unreachable"
+  when:
+    - unreachable is defined
+
 - name: "Print System Information"
-  debug:
+  ansible.builtin.debug:
     msg:
       - "System {{ inventory_hostname }}"
       - "    I. Hostname:  {{ inventory_hostname_short }}"
-      - "    Hostname:     {{ ansible_hostname }}"
-      - "    FQDN:         {{ ansible_fqdn }}"
-      - "    IPv4 Addr:    {{ ansible_host }}"
-      - "    IPv6 Addr:    {{ ansible_default_ipv6.address | default(none) }}"
-      - "    System:       {{ ansible_system }}"
-      - "    OS Family:    {{ ansible_os_family }}"
-      - "    Distro:       {{ ansible_distribution }}"
-      - "    Distro ID:    {{ ansible_lsb.id }}"
-      - "    Release       {{ ansible_distribution_release }}"
+      - "    Hostname:     {{ ansible_hostname | default(inventory_hostname_short) }}"
+      - "    FQDN:         {{ ansible_fqdn | default(inventory_hostname) }}"
+      - "    System:       {{ ansible_system | default(none) }}"
+      - "    OS:           {{ ansible_os | default(none) }}"
+      - "    Network OS:   {{ ansible_network_os | default(none) }}"
+      - "    OS Family:    {{ ansible_os_family | default(none) }}"
+      - "    Distro:       {{ ansible_distribution | default(none) }}"
+      - "    Distro ID:    {{ ansible_lsb.id | default(none) }}"
+      - "    Release       {{ ansible_distribution_release | default(none) }}"
+      - "    Status:       {{ status }}"
       - "  Inventory:      {{ inventory_dir }}"
-    verbosity: 1
 
-- name: Print Geolocation Information
+- name: Print Host Network Information
   debug:
     msg:
-      - "City:    {{ city }}"
-      - "State:   {{ region }}"
-      - "Country: {{ country }}"
-      - "Location: {{ loc }}"
+      - "System {{ inventory_hostname }}"
+      - "    IPv4 Addr:    {{ ansible_host }}"
+      - "    IPv6 Addr:    {{ ansible_default_ipv6.address | default(none) }}"
+      - "    Gateway:       {{ ansible_default_ipv4.gateway | default(none) }}" 
     verbosity: 1
 
 - name: "Print Domain Information"
   debug:
     msg:
       - "System {{ inventory_hostname }}"
-      - "    Domain:       {{ ansible_domain }}"
-      - "    Realm:        {{ ansible_domain|upper }}"
-      - "    Workgroup:    {{ ansible_domain.split('.')[0]|upper }}"
-      - "    Lets Encrypt: {{ letsencrypt_hosts }}"
+      - "    Domain:       {{ ansible_domain  | default(none) }}"
+      - "    Realm:        {{ realm | upper }}"
+      - "    Workgroup:    {{ workgroup | upper }}"
+      - "    Lets Encrypt: {{ letsencrypt_hosts  | default(none) }}"
     verbosity: 2
 
-- debug:
+- name: Print Geolocation Information
+  debug:
     msg:
-      - "System {{ inventory_hostname }}"
-      - "    OS Family:           {{ ansible_os_family.split(' ')[0] | lower }}"
+      - "City:    {{ city  | default(none) }}"
+      - "State:   {{ region  | default(none) }}"
+      - "Country: {{ country  | default(none) }}"
+      - "Location: {{ loc  | default(none) }}"
     verbosity: 3
 
-- debug:
+- name: Print Host Group Information
+  debug:
     msg:
       - "System {{ inventory_hostname }}"
-      - "    OS:           {{ ansible_os | default(none) }}"
-      - "    Network OS:   {{ ansible_network_os | default(none) }}"
+      - "Groups:  {{ group_names }}"
+    verbosity: 1
+
+- name: "Display Host ip by group"
+  ansible.builtin.debug:
+    msg:
+      - "Group name: {{ __group_name }}"
+      - "  Hosts:    {{ item }}"
+    verbosity: 1
+  loop: "{{ groups[__group_name] }}"
+  vars:
+    __group_name: "wifi_access_points"
+  delegate_to: localhost
+  run_once: yes
+
+- name: "Display groups"
+  ansible.builtin.debug:
+    msg:
+      - "Group name: {{ item.key }}"
+      - "  Hosts:    {{ item.value }}"
     verbosity: 2
+  loop: "{{ groups | dict2items }}"
+  delegate_to: localhost
+  run_once: yes
 
-#    msg: System {{ inventory_hostname }} has gateway {{ ansible_default_ipv4.gateway }}
-#  when: ansible_default_ipv4.gateway is defined
+- name: "Display groups"
+  ansible.builtin.debug:
+    msg:
+      - "Group: {{ item }}"
+    verbosity: 3
+  loop: "{{ groups | dict2items }}"
+  delegate_to: localhost
+  run_once: yes
 
-# Example that prints return information from the previous task
-
-- name: Display all variables/facts known for a host
-  debug:
-    var: hostvars[inventory_hostname]
+- name: "Display all variables/facts known for a host"
+  ansible.builtin.debug:
+    msg:
+      - "{{ hostvars[inventory_hostname] }}"
     verbosity: 4
 
 # ======================================================================
